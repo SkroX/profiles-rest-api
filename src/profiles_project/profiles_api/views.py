@@ -7,6 +7,16 @@ from . import serializers
 
 from rest_framework import status
 
+from rest_framework import viewsets
+
+from . import models
+
+from . import permissions
+
+from rest_framework.authentication import TokenAuthentication
+
+from rest_framework import filters
+
 # Create your views here.
 
 class HelloApiView(APIView):
@@ -43,4 +53,23 @@ class HelloApiView(APIView):
         return Response({"message":"patch"})
 
     def delete(self,request,pk=None):
-        return Response({"message":"delete"})
+        return Response({"message":"default"})
+
+
+
+class HelloViewSet(viewsets.ViewSet):
+    def list(self, request):
+
+        a_viewset=["dsa","asfddsa"]
+
+        return Response({"message":"aefd","viewset":a_viewset})
+
+
+class UserProfileViewSet(viewsets.ModelViewSet):
+
+    serializer_class=serializers.UserProfileSerializer
+    queryset=models.UserProfile.objects.all()
+    authentication_classes=(TokenAuthentication,)
+    permission_classes=(permissions.UpdateOwnProfile,)
+    filter_backends=(filters.SearchFilter,)
+    search_fields=('name','email',)
